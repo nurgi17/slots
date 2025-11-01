@@ -51,10 +51,10 @@
             <line
               v-for="(win, index) in store.currentResult.winningLines"
               :key="index"
-              :x1="getLineCoords(win.line.line[0]).x"
-              :y1="getLineCoords(win.line.line[0]).y"
-              :x2="getLineCoords(win.line.line[2]).x"
-              :y2="getLineCoords(win.line.line[2]).y"
+              :x1="getLineCoords(win.line.line[0] ?? [0, 0]).x"
+              :y1="getLineCoords(win.line.line[0] ?? [0, 0]).y"
+              :x2="getLineCoords(win.line.line[2] ?? [0, 0]).x"
+              :y2="getLineCoords(win.line.line[2] ?? [0, 0]).y"
               stroke="black"
               stroke-width="6"
               stroke-linecap="round"
@@ -111,12 +111,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useGameStore } from '../stores/game'
-import { SYMBOLS } from '../utils/gameLogic'
-import SlotReel from './Reel.vue'
+// import { SYMBOLS } from '../utils/gameLogic'
+import SlotReel from './MiniReel.vue'
 import WinDisplay from './WinDisplay.vue'
 
 const store = useGameStore()
-const symbols = SYMBOLS
+// const symbols = SYMBOLS
 const showMachine = ref(false)
 
 const getCurrentSymbol = (row: number, col: number): string => {
@@ -127,9 +127,9 @@ const getCurrentSymbol = (row: number, col: number): string => {
       ['cherry', 'diamond', 'seven'],
       ['grape', 'watermelon', 'lemon'],
     ]
-    return defaultSymbols[row][col]
+    return defaultSymbols[row]?.[col] ?? ''
   }
-  return store.currentResult.symbols[row][col]
+  return store.currentResult.symbols[row]?.[col] ?? ''
 }
 
 const handleSpin = async () => {
@@ -146,8 +146,8 @@ const getLineCoords = (position: number[]) => {
   const offset = 126 // половина ячейки
 
   return {
-    x: col * cellSize + offset,
-    y: row * cellSize + offset,
+    x: (col || 0) * cellSize + offset,
+    y: (row || 0) * cellSize + offset,
   }
 }
 

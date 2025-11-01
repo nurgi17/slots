@@ -2,8 +2,8 @@
   <div class="reel" :class="{ spinning: isSpinning }">
     <div class="reel-content">
       <div class="symbol-display" :style="{ transform: `translateY(${displayOffset}px)` }">
-        <div class="symbol" :style="{ backgroundColor: finalSymbolData.color }">
-          <span class="symbol-icon">{{ finalSymbolData.icon }}</span>
+        <div class="symbol" :style="{ backgroundColor: finalSymbolData?.color }">
+          <span class="symbol-icon">{{ finalSymbolData?.icon }}</span>
         </div>
       </div>
 
@@ -52,10 +52,10 @@ const finalSymbolData = computed(() => {
 const spinningSymbols = computed(() => {
   const symbols: Symbol[] = []
   for (let i = 0; i < 30; i++) {
-    symbols.push(SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)])
+    symbols.push(SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]!)
   }
   // Добавляем финальный символ в конец
-  symbols.push(finalSymbolData.value)
+  symbols.push(finalSymbolData.value!)
   return symbols
 })
 

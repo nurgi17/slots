@@ -85,11 +85,11 @@ function getRandomSymbol(): Symbol {
     }
   }
 
-  return SYMBOLS[SYMBOLS.length - 1]
+  return SYMBOLS[SYMBOLS.length - 1]!
 }
 
 // Генерация выигрышного поля с конкретным символом
-function generateWinningField(targetSymbol: Symbol, lineIndex: number): string[][] {
+function generateWinningField(targetSymbol: Symbol, lineIndex: number) {
   const field: string[][] = []
   const winLine = WIN_LINES[lineIndex]
 
@@ -97,13 +97,15 @@ function generateWinningField(targetSymbol: Symbol, lineIndex: number): string[]
   for (let row = 0; row < 3; row++) {
     field[row] = []
     for (let col = 0; col < 3; col++) {
-      field[row][col] = getRandomSymbol().id
+      field[row]![col] = getRandomSymbol().id
     }
   }
 
+  if (!winLine) return
+
   // Заполняем выигрышную линию нужным символом
   for (const [row, col] of winLine.line) {
-    field[row][col] = targetSymbol.id
+    field[row!]![col!] = targetSymbol.id
   }
 
   return field
@@ -120,7 +122,7 @@ function generateLosingField(): string[][] {
     for (let row = 0; row < 3; row++) {
       field[row] = []
       for (let col = 0; col < 3; col++) {
-        field[row][col] = getRandomSymbol().id
+        field[row]![col] = getRandomSymbol().id
       }
     }
     attempts++
@@ -129,9 +131,9 @@ function generateLosingField(): string[][] {
   // Если не удалось сгенерировать проигрышное поле, делаем его вручную
   if (hasAnyWinningLine(field)) {
     field = [
-      [SYMBOLS[0].id, SYMBOLS[1].id, SYMBOLS[2].id],
-      [SYMBOLS[3].id, SYMBOLS[4].id, SYMBOLS[5].id],
-      [SYMBOLS[6].id, SYMBOLS[0].id, SYMBOLS[1].id],
+      [SYMBOLS[0]!.id, SYMBOLS[1]!.id, SYMBOLS[2]!.id],
+      [SYMBOLS[3]!.id, SYMBOLS[4]!.id, SYMBOLS[5]!.id],
+      [SYMBOLS[6]!.id, SYMBOLS[0]!.id, SYMBOLS[1]!.id],
     ]
   }
 
@@ -141,7 +143,7 @@ function generateLosingField(): string[][] {
 // Проверка наличия хотя бы одной выигрышной линии
 function hasAnyWinningLine(field: string[][]): boolean {
   for (const winLine of WIN_LINES) {
-    const symbolsOnLine = winLine.line.map(([row, col]) => field[row][col])
+    const symbolsOnLine = winLine.line.map(([row, col]) => field[row!]![col!])
     if (symbolsOnLine[0] === symbolsOnLine[1] && symbolsOnLine[1] === symbolsOnLine[2]) {
       return true
     }
@@ -156,7 +158,7 @@ export function checkWinningLines(field: string[][]): GameResult {
   let isJackpot = false
 
   for (const winLine of WIN_LINES) {
-    const symbolsOnLine = winLine.line.map(([row, col]) => field[row][col])
+    const symbolsOnLine = winLine.line.map(([row, col]) => field[row!]![col!])
 
     // Проверяем, все ли символы на линии одинаковые
     if (symbolsOnLine[0] === symbolsOnLine[1] && symbolsOnLine[1] === symbolsOnLine[2]) {
@@ -195,14 +197,14 @@ export function playGame(): GameResult {
     // 2% - Джекпот
     const jackpotSymbol = SYMBOLS.find((s) => s.id === 'jackpot')!
     const randomLine = Math.floor(Math.random() * WIN_LINES.length)
-    field = generateWinningField(jackpotSymbol, randomLine)
+    field = generateWinningField(jackpotSymbol, randomLine)!
   } else if (rand < 0.62) {
     // 60% - Обычный выигрыш (10+ коинов)
     // Выбираем случайный символ (исключая джекпот)
     const nonJackpotSymbols = SYMBOLS.filter((s) => s.id !== 'jackpot')
     const winSymbol = nonJackpotSymbols[Math.floor(Math.random() * nonJackpotSymbols.length)]
     const randomLine = Math.floor(Math.random() * WIN_LINES.length)
-    field = generateWinningField(winSymbol, randomLine)
+    field = generateWinningField(winSymbol as Symbol, randomLine)!
   } else {
     // 38% - Проигрыш
     field = generateLosingField()
