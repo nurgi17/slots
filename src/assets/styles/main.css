@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* === CERA PRO === */
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-ThinItalic.otf') format('opentype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('/src/assets/fonts/CeraPRO-BlackItalic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* === CALVINO ITALIC === */
+@font-face {
+  font-family: 'Calvino';
+  src: url('/src/assets/fonts/Calvino-Italic-trial.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@theme {
+  --font-cera: 'Cera Pro', sans-serif;
+}
+
+* {
+  font-family: "Cera Pro", sans-serif;
+}
+
+@keyframes pulse-zoom {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@utility animate-pulse-zoom {
+  animation: pulse-zoom 2s ease-in-out infinite;
+}

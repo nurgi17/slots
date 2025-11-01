@@ -74,7 +74,7 @@ const handleClose = () => {
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  min-width: 400px;
+  min-width: 900px;
   max-width: 90%;
   animation: winBounce 0.6s ease-out;
 }
@@ -115,14 +115,14 @@ const handleClose = () => {
 
 .win-title,
 .jackpot-title {
-  font-size: 36px;
+  font-size: 64px;
   font-weight: bold;
   margin: 0 0 20px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .jackpot-title {
-  font-size: 48px;
+  font-size: 64px;
   animation: jackpotText 0.5s ease-in-out infinite alternate;
 }
 
@@ -134,14 +134,14 @@ const handleClose = () => {
 }
 
 .amount {
-  font-size: 72px;
+  font-size: 136px;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .currency {
-  font-size: 24px;
+  font-size: 56px;
   opacity: 0.9;
 }
 
@@ -164,17 +164,19 @@ const handleClose = () => {
 }
 
 .line-name {
+  font-size: 48px;
   font-weight: 600;
   flex: 1;
 }
 
 .line-symbol {
-  font-size: 24px;
+  font-size: 56px;
   flex: 1;
   text-align: center;
 }
 
 .line-amount {
+  font-size: 56px;
   font-weight: bold;
   color: #ffd700;
   flex: 1;
@@ -184,7 +186,7 @@ const handleClose = () => {
 .ok-button {
   margin-top: 20px;
   padding: 15px 40px;
-  font-size: 20px;
+  font-size: 48px;
   font-weight: bold;
   color: white;
   background: rgba(255, 255, 255, 0.2);

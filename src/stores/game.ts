@@ -4,7 +4,7 @@ import { playGame } from '../utils/gameLogic'
 
 export const useGameStore = defineStore('game', {
   state: (): GameState & { showWinDisplay: boolean } => ({
-    balance: 1000,
+    balance: 50,
     isSpinning: false,
     currentResult: null,
     totalSpins: 0,
@@ -55,7 +55,7 @@ export const useGameStore = defineStore('game', {
     },
 
     resetGame() {
-      this.balance = 1000
+      this.balance = 50
       this.currentResult = null
       this.totalSpins = 0
       this.totalWins = 0

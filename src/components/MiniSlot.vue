@@ -1,74 +1,89 @@
 <template>
-  <div class="slot-machine">
-    <div class="machine-header">
-      <h1 class="game-title">🎰 Мини-Слот 21 🎰</h1>
-      <div class="stats">
-        <div class="stat-item">
-          <span class="stat-label">Баланс:</span>
-          <span class="stat-value">{{ store.balance }} 💰</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Спинов:</span>
-          <span class="stat-value">{{ store.totalSpins }}</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Побед:</span>
-          <span class="stat-value">{{ store.totalWins }} ({{ store.winRate }}%)</span>
-        </div>
+  <div v-if="!showMachine" class="flex justify-center items-center">
+    <div class="flex flex-col justify-center items-center">
+      <div class="mb-10!">
+        <img class="animate-pulse-zoom" src="../assets/img/logo.svg" alt="Logo" />
       </div>
-    </div>
-
-    <div class="machine-body">
-      <div class="reels-container">
-        <div v-for="row in 3" :key="row" class="reel-row">
-          <SlotReel
-            v-for="col in 3"
-            :key="`${row}-${col}`"
-            :symbol-id="getCurrentSymbol(row - 1, col - 1)"
-            :is-spinning="store.isSpinning"
-            :delay="(row - 1) * 300 + (col - 1) * 100"
-          />
-        </div>
-      </div>
-
-      <div
-        class="win-lines-overlay"
-        v-if="store.currentResult && store.currentResult.totalWin > 0 && !store.isSpinning"
-      >
-        <svg class="lines-svg">
-          <line
-            v-for="(win, index) in store.currentResult.winningLines"
-            :key="index"
-            :x1="getLineCoords(win.line.line[0]).x"
-            :y1="getLineCoords(win.line.line[0]).y"
-            :x2="getLineCoords(win.line.line[2]).x"
-            :y2="getLineCoords(win.line.line[2]).y"
-            :stroke="win.symbol.color"
-            stroke-width="6"
-            stroke-linecap="round"
-            class="win-line-animation"
-            :style="{ animationDelay: `${index * 0.2}s` }"
-          />
-        </svg>
-      </div>
-    </div>
-
-    <div class="machine-controls">
-      <button
-        class="spin-button"
-        :class="{ spinning: store.isSpinning, disabled: !store.canSpin }"
-        :disabled="!store.canSpin"
-        @click="handleSpin"
-      >
-        <span v-if="store.isSpinning">⏳ ВРАЩЕНИЕ...</span>
-        <span v-else-if="store.balance < 10">💸 НЕ ХВАТАЕТ МОНЕТ</span>
-        <span v-else>🎲 СТАРТ (10 коинов)</span>
+      <h1 class="text-[100px]! game-title mb-20!">Игра мини-слот</h1>
+      <button class="spin-button1 spinning" @click="showMachine = true">
+        <span>Начать игру</span>
       </button>
-
-      <button class="reset-button" @click="store.resetGame">🔄 СБРОСИТЬ</button>
     </div>
+  </div>
+  <div v-if="showMachine" class="slot-machine">
+    <div>
+      <div class="machine-header">
+        <h1 class="game-title">{{ $t('miniSlot') }}</h1>
+        <div class="stats">
+          <div class="stat-item">
+            <span class="stat-label">Баланс:</span>
+            <span class="stat-value">{{ store.balance }} 💰</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Спинов:</span>
+            <span class="stat-value">{{ store.totalSpins }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Побед:</span>
+            <span class="stat-value">{{ store.totalWins }} ({{ store.winRate }}%)</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="paytable">
+      <div class="machine-body">
+        <div class="reels-container">
+          <div v-for="row in 3" :key="row" class="reel-row">
+            <SlotReel
+              v-for="col in 3"
+              :key="`${row}-${col}`"
+              :symbol-id="getCurrentSymbol(row - 1, col - 1)"
+              :is-spinning="store.isSpinning"
+              :delay="(row - 1) * 300 + (col - 1) * 100"
+            />
+          </div>
+        </div>
+
+        <div
+          class="win-lines-overlay"
+          v-if="store.currentResult && store.currentResult.totalWin > 0 && !store.isSpinning"
+        >
+          <svg class="lines-svg">
+            <line
+              v-for="(win, index) in store.currentResult.winningLines"
+              :key="index"
+              :x1="getLineCoords(win.line.line[0]).x"
+              :y1="getLineCoords(win.line.line[0]).y"
+              :x2="getLineCoords(win.line.line[2]).x"
+              :y2="getLineCoords(win.line.line[2]).y"
+              stroke="black"
+              stroke-width="6"
+              stroke-linecap="round"
+              class="win-line-animation"
+              :style="{ animationDelay: `${index * 0.2}s` }"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="machine-controls">
+        <button
+          v-if="store.totalSpins < 5"
+          class="spin-button"
+          :class="{ spinning: store.isSpinning, disabled: !store.canSpin }"
+          :disabled="!store.canSpin"
+          @click="handleSpin"
+        >
+          <span v-if="store.isSpinning">⏳ ВРАЩЕНИЕ...</span>
+          <span v-else-if="store.balance < 10">💸 НЕ ХВАТАЕТ МОНЕТ</span>
+          <span v-else>🎲 СТАРТ (10 коинов)</span>
+        </button>
+
+        <button v-if="store.totalSpins > 4" class="reset-button" @click="resetGame">
+          🔄 НОВАЯ ИГРА
+        </button>
+      </div>
+
+      <!-- <div class="paytable">
       <h3>💎 Таблица выплат</h3>
       <div class="paytable-items">
         <div
@@ -82,17 +97,19 @@
           <span class="payout">{{ symbol.multiplier * 10 }} коинов</span>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <WinDisplay
-      :result="store.currentResult"
-      :show="store.showWinDisplay"
-      @close="handleCloseWin"
-    />
+      <WinDisplay
+        :result="store.currentResult"
+        :show="store.showWinDisplay"
+        @close="handleCloseWin"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useGameStore } from '../stores/game'
 import { SYMBOLS } from '../utils/gameLogic'
 import SlotReel from './Reel.vue'
@@ -100,6 +117,7 @@ import WinDisplay from './WinDisplay.vue'
 
 const store = useGameStore()
 const symbols = SYMBOLS
+const showMachine = ref(false)
 
 const getCurrentSymbol = (row: number, col: number): string => {
   if (!store.currentResult) {
@@ -124,22 +142,27 @@ const handleCloseWin = () => {
 
 const getLineCoords = (position: number[]) => {
   const [row, col] = position
-  const cellSize = 126 // 120px + 6px gap
-  const offset = 63 // половина ячейки
+  const cellSize = 252 // 120px + 6px gap
+  const offset = 126 // половина ячейки
 
   return {
     x: col * cellSize + offset,
     y: row * cellSize + offset,
   }
 }
+
+function resetGame() {
+  store.resetGame()
+  showMachine.value = false
+}
 </script>
 
 <style scoped>
 .slot-machine {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 30px;
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  background-image: url('../assets/img/back-purple.jpg');
   border-radius: 20px;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
   font-family: 'Arial', sans-serif;
@@ -151,7 +174,7 @@ const getLineCoords = (position: number[]) => {
 }
 
 .game-title {
-  font-size: 48px;
+  font-size: 79px;
   color: #ffd700;
   margin: 0 0 20px;
   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
@@ -182,13 +205,13 @@ const getLineCoords = (position: number[]) => {
 }
 
 .stat-label {
-  font-size: 14px;
+  font-size: 40px;
   color: #aaa;
   text-transform: uppercase;
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: 60px;
   font-weight: bold;
   color: #ffd700;
 }
@@ -248,9 +271,25 @@ const getLineCoords = (position: number[]) => {
 
 .spin-button {
   flex: 1;
+  max-width: 720px;
+  padding: 20px 40px;
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  text-transform: uppercase;
+}
+
+.spin-button1 {
+  flex: 1;
   max-width: 400px;
   padding: 20px 40px;
-  font-size: 24px;
+  font-size: 48px;
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -271,7 +310,8 @@ const getLineCoords = (position: number[]) => {
   transform: translateY(0);
 }
 
-.spin-button.spinning {
+.spin-button.spinning,
+.spin-button1.spinning {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   animation: spinButtonPulse 1s ease-in-out infinite;
 }
@@ -294,7 +334,7 @@ const getLineCoords = (position: number[]) => {
 
 .reset-button {
   padding: 20px 30px;
-  font-size: 18px;
+  font-size: 48px;
   font-weight: bold;
   color: white;
   background: #555;

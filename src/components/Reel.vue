@@ -98,8 +98,8 @@ watch(
 
 <style scoped>
 .reel {
-  width: 120px;
-  height: 120px;
+  width: 240px;
+  height: 240px;
   overflow: hidden;
   border: 3px solid #333;
   border-radius: 10px;
@@ -139,8 +139,8 @@ watch(
 }
 
 .symbol {
-  width: 120px;
-  height: 120px;
+  width: 240px;
+  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,7 +149,7 @@ watch(
 }
 
 .symbol-icon {
-  font-size: 64px;
+  font-size: 96px;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
