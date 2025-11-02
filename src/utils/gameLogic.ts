@@ -1,25 +1,62 @@
+import logo from '@/assets/img/logo.svg'
 import type { GameResult, Symbol, WinLine } from '../types/game'
 
 // Определяем символы с коэффициентами
 export const SYMBOLS: Symbol[] = [
-  { id: 'jackpot', name: '21', icon: '🎰', multiplier: 100, probability: 0.02, color: '#FFD700' },
-  { id: 'seven', name: '7', icon: '7️⃣', multiplier: 20, probability: 0.05, color: '#FF0000' },
+  {
+    id: 'jackpot',
+    name: '21',
+    icon: '🎰',
+    multiplier: 15,
+    probability: 0.02,
+    color: '#3C1082',
+    img: logo,
+  },
+  {
+    id: 'seven',
+    name: '7',
+    icon: '7️⃣',
+    multiplier: 10,
+    probability: 0.05,
+    color: '#FF0000',
+  },
   {
     id: 'diamond',
     name: 'Diamond',
     icon: '💎',
-    multiplier: 15,
+    multiplier: 10,
     probability: 0.08,
     color: '#00BFFF',
   },
-  { id: 'cherry', name: 'Cherry', icon: '🍒', multiplier: 10, probability: 0.12, color: '#DC143C' },
-  { id: 'lemon', name: 'Lemon', icon: '🍋', multiplier: 8, probability: 0.15, color: '#FFFF00' },
-  { id: 'grape', name: 'Grape', icon: '🍇', multiplier: 5, probability: 0.18, color: '#9370DB' },
+  {
+    id: 'cherry',
+    name: 'Cherry',
+    icon: '🍒',
+    multiplier: 10,
+    probability: 0.12,
+    color: '#DC143C',
+  },
+  {
+    id: 'lemon',
+    name: 'Lemon',
+    icon: '🍋',
+    multiplier: 10,
+    probability: 0.15,
+    color: '#FFFF00',
+  },
+  {
+    id: 'grape',
+    name: 'Grape',
+    icon: '🍇',
+    multiplier: 10,
+    probability: 0.18,
+    color: '#9370DB',
+  },
   {
     id: 'watermelon',
     name: 'Watermelon',
     icon: '🍉',
-    multiplier: 3,
+    multiplier: 10,
     probability: 0.4,
     color: '#32CD32',
   },
@@ -70,8 +107,6 @@ export const WIN_LINES: WinLine[] = [
     name: 'Диагональ ↙',
   },
 ]
-
-const BASE_BET = 10
 
 // Генерация случайного символа с учетом вероятностей
 function getRandomSymbol(): Symbol {
@@ -164,7 +199,7 @@ export function checkWinningLines(field: string[][]): GameResult {
     if (symbolsOnLine[0] === symbolsOnLine[1] && symbolsOnLine[1] === symbolsOnLine[2]) {
       const symbolId = symbolsOnLine[0]
       const symbol = SYMBOLS.find((s) => s.id === symbolId)!
-      const winAmount = BASE_BET * symbol.multiplier
+      const winAmount = symbol.multiplier
 
       winningLines.push({
         line: winLine,

@@ -2,8 +2,11 @@
   <div class="reel" :class="{ spinning: isSpinning }">
     <div class="reel-content">
       <div class="symbol-display" :style="{ transform: `translateY(${displayOffset}px)` }">
-        <div class="symbol" :style="{ backgroundColor: finalSymbolData?.color }">
-          <span class="symbol-icon">{{ finalSymbolData?.icon }}</span>
+        <div class="symbol px-4!" :style="{ backgroundColor: finalSymbolData?.color }">
+          <span v-if="!Boolean(finalSymbolData?.img)" class="symbol-icon">{{
+            finalSymbolData?.icon
+          }}</span>
+          <img v-else class="w-full h-auto" :src="finalSymbolData?.img" alt="" />
         </div>
       </div>
 
@@ -13,10 +16,11 @@
           <div
             v-for="(symbol, index) in spinningSymbols"
             :key="index"
-            class="symbol"
+            class="symbol px-4!"
             :style="{ backgroundColor: symbol.color }"
           >
-            <span class="symbol-icon">{{ symbol.icon }}</span>
+            <span v-if="!Boolean(symbol.img)" class="symbol-icon">{{ symbol.icon }}</span>
+            <img v-else class="w-full h-auto" :src="symbol.img" alt="" />
           </div>
         </div>
       </div>

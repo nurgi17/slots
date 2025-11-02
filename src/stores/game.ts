@@ -4,10 +4,10 @@ import { playGame } from '../utils/gameLogic'
 
 export const useGameStore = defineStore('game', {
   state: (): GameState & { showWinDisplay: boolean } => ({
-    balance: 50,
+    balance: 10,
     isSpinning: false,
     currentResult: null,
-    totalSpins: 0,
+    totalSpins: 250,
     totalWins: 0,
     showWinDisplay: false,
   }),
@@ -29,7 +29,7 @@ export const useGameStore = defineStore('game', {
       this.isSpinning = true
       this.showWinDisplay = false // Скрываем предыдущее окно
       this.balance -= 10 // Ставка
-      this.totalSpins++
+      this.totalSpins--
 
       // Имитация задержки спина (5-7 секунд)
       await new Promise((resolve) => setTimeout(resolve, 6000))
@@ -55,10 +55,10 @@ export const useGameStore = defineStore('game', {
     },
 
     resetGame() {
-      this.balance = 50
+      this.balance = 10
       this.currentResult = null
-      this.totalSpins = 0
-      this.totalWins = 0
+      // this.totalSpins = 0
+      // this.totalWins = 0
       this.showWinDisplay = false
     },
   },

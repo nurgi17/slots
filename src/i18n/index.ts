@@ -5,7 +5,7 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages: {
     ru: {
-      miniSlot: '🎰 Мини-Слот 🎰',
+      miniSlot: '🎰 Mini-Slot 🎰',
     },
     en: {
       miniSlot: '🎰 Mini-Slot 🎰',

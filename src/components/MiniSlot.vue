@@ -4,8 +4,8 @@
       <div class="mb-10!">
         <img class="animate-pulse-zoom" src="../assets/img/logo.svg" alt="Logo" />
       </div>
-      <h1 class="text-[100px]! game-title mb-20!">Игра мини-слот</h1>
-      <button class="spin-button1 spinning" @click="showMachine = true">
+      <h1 class="text-[100px]! game-title mb-20!">{{ $t('miniSlot') }}</h1>
+      <button class="spin-button1 spinning" @click="start">
         <span>Начать игру</span>
       </button>
     </div>
@@ -15,17 +15,18 @@
       <div class="machine-header">
         <h1 class="game-title">{{ $t('miniSlot') }}</h1>
         <div class="stats">
-          <div class="stat-item">
+          <!-- <div class="stat-item">
             <span class="stat-label">Баланс:</span>
             <span class="stat-value">{{ store.balance }} 💰</span>
-          </div>
+          </div> -->
           <div class="stat-item">
             <span class="stat-label">Спинов:</span>
             <span class="stat-value">{{ store.totalSpins }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">Побед:</span>
-            <span class="stat-value">{{ store.totalWins }} ({{ store.winRate }}%)</span>
+            <span class="stat-value">{{ store.totalWins }}</span>
+            <!-- ({{ store.winRate }}%) -->
           </div>
         </div>
       </div>
@@ -67,7 +68,7 @@
 
       <div class="machine-controls">
         <button
-          v-if="store.totalSpins < 5"
+          v-if="gameStarted"
           class="spin-button"
           :class="{ spinning: store.isSpinning, disabled: !store.canSpin }"
           :disabled="!store.canSpin"
@@ -75,12 +76,10 @@
         >
           <span v-if="store.isSpinning">⏳ ВРАЩЕНИЕ...</span>
           <span v-else-if="store.balance < 10">💸 НЕ ХВАТАЕТ МОНЕТ</span>
-          <span v-else>🎲 СТАРТ (10 коинов)</span>
+          <span v-else>🎲 СТАРТ</span>
         </button>
 
-        <button v-if="store.totalSpins > 4" class="reset-button" @click="resetGame">
-          🔄 НОВАЯ ИГРА
-        </button>
+        <button v-if="!gameStarted" class="reset-button" @click="resetGame">🔄 НОВАЯ ИГРА</button>
       </div>
 
       <!-- <div class="paytable">
@@ -109,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useGameStore } from '../stores/game'
 // import { SYMBOLS } from '../utils/gameLogic'
 import SlotReel from './MiniReel.vue'
@@ -118,6 +117,7 @@ import WinDisplay from './WinDisplay.vue'
 const store = useGameStore()
 // const symbols = SYMBOLS
 const showMachine = ref(false)
+const gameStarted = ref(false)
 
 const getCurrentSymbol = (row: number, col: number): string => {
   if (!store.currentResult) {
@@ -155,6 +155,22 @@ function resetGame() {
   store.resetGame()
   showMachine.value = false
 }
+
+function start() {
+  showMachine.value = true
+  gameStarted.value = true
+  if (store.totalSpins === 0) {
+    location.reload()
+  }
+}
+watch(
+  () => store.isSpinning,
+  (v) => {
+    if (!v) {
+      gameStarted.value = false
+    }
+  },
+)
 </script>
 
 <style scoped>

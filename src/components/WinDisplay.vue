@@ -16,7 +16,10 @@
           <div class="win-lines" v-if="winningLines.length > 0">
             <div v-for="(win, index) in winningLines" :key="index" class="win-line-item">
               <span class="line-name">{{ win.line.name }}:</span>
-              <span class="line-symbol">{{ win.symbol.icon }} × 3</span>
+              <span v-if="!Boolean(win.symbol.img)" class="line-symbol"
+                >{{ win.symbol.icon }} × 3</span
+              >
+              <img v-else class="w-50 h-auto" :src="win.symbol.img" alt="" />
               <span class="line-amount">{{ win.winAmount }} коинов</span>
             </div>
           </div>

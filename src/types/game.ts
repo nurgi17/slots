@@ -5,6 +5,7 @@ export interface Symbol {
   multiplier: number
   probability: number
   color: string
+  img?: string
 }
 
 export interface WinLine {
