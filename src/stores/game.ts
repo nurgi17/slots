@@ -22,11 +22,11 @@ export const useGameStore = defineStore('game', {
       this.isSpinning = true
       this.showWinDisplay = false // Скрываем предыдущее окно
 
-      // Имитация задержки спина (5-7 секунд)
-      await new Promise((resolve) => setTimeout(resolve, 6000))
-
       const result: GameResult = playGame()
       this.currentResult = result
+
+      // Имитация задержки спина (5-7 секунд)
+      await new Promise((resolve) => setTimeout(resolve, 6000))
 
       // Показываем окно выигрыша после небольшой задержки
       setTimeout(() => {

@@ -1,27 +1,14 @@
 <template>
-  <div
-    class="reel border-8! border-solid! border-[#7617b4]! rounded-[30px]"
-    :class="{ spinning: isSpinning }"
-  >
+  <div class="reel border-8! border-solid! border-[#7617b4]! rounded-[30px]">
     <div class="reel-content">
-      <div class="symbol-display" :style="{ transform: `translateY(${displayOffset}px)` }">
-        <div class="symbol pr-4! flex items-center justify-center text-center">
-          <span v-if="!Boolean(finalSymbolData?.img)" class="symbol-icon">{{
-            finalSymbolData?.icon
-          }}</span>
-          <img v-else class="w-full h-auto" :src="finalSymbolData?.img" alt="" />
-        </div>
-      </div>
-
-      <!-- Spinning overlay с множеством символов -->
-      <div v-if="isSpinning" class="spin-overlay">
+      <div class="spin-overlay">
         <div class="reel-strip" :style="{ transform: `translateY(${spinOffset}px)` }">
           <div
             v-for="(symbol, index) in spinningSymbols"
             :key="index"
-            class="symbol pr-4! flex items-center justify-center text-center"
+            class="symbol flex items-center justify-center text-center"
           >
-            <span v-if="!Boolean(symbol.img)" class="symbol-icon">{{ symbol.icon }}</span>
+            <span v-if="!symbol.img" class="symbol-icon">{{ symbol.icon }}</span>
             <img v-else class="w-full h-auto" :src="symbol.img" alt="" />
           </div>
         </div>
@@ -31,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import type { Symbol } from '../types/game'
 import { SYMBOLS } from '../utils/gameLogic'
 
@@ -41,65 +28,75 @@ interface Props {
   delay?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  delay: 0,
-})
+const props = withDefaults(defineProps<Props>(), { delay: 0 })
 
 const spinOffset = ref(0)
-const displayOffset = ref(0)
-const SYMBOL_HEIGHT = 224
+const SYMBOL_HEIGHT = 240
 
-// Получаем данные финального символа
 const finalSymbolData = computed(() => {
   return SYMBOLS.find((s) => s.id === props.symbolId) || SYMBOLS[0]
 })
 
-// Генерируем случайные символы для эффекта вращения
-const spinningSymbols = computed(() => {
-  const symbols: Symbol[] = []
-  for (let i = 0; i < 30; i++) {
-    symbols.push(SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]!)
+// Генерация ленты: все случайные символы + фиксированный финальный
+const spinningSymbols = ref<Symbol[]>([])
+
+function generateSpinningSymbols() {
+  const symbols: (Symbol & { idx: number })[] = []
+
+  for (let i = 0; i < 20; i++) {
+    const sym = { ...SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]!, idx: i }
+    symbols.push(sym)
   }
-  // Добавляем финальный символ в конец
-  symbols.push(finalSymbolData.value!)
-  return symbols
-})
+
+  // Финальный символ с idx = 20
+  symbols.push({ ...finalSymbolData.value!, idx: 20 })
+
+  // Сортируем по idx
+  symbols.sort((a, b) => a.idx - b.idx)
+
+  spinningSymbols.value = symbols
+}
+
+// Функция плавного анимирования с easing
+function animateTo(target: number, duration: number) {
+  const start = spinOffset.value
+  const change = target - start
+  const startTime = performance.now()
+
+  const animate = (now: number) => {
+    const elapsed = now - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    const easeOut = 1 - Math.pow(1 - progress, 3)
+
+    spinOffset.value = start + change * easeOut
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      spinOffset.value = target // точное конечное положение
+    }
+  }
+
+  requestAnimationFrame(animate)
+}
 
 watch(
   () => props.isSpinning,
   async (spinning) => {
     if (spinning) {
-      // Начинаем вращение с задержкой
+      generateSpinningSymbols() // формируем ленту с финальным символом
       await new Promise((resolve) => setTimeout(resolve, props.delay))
+      const totalDistance = (spinningSymbols.value.length - 1) * SYMBOL_HEIGHT
+      const duration = 4000 + Math.random() * 2000
 
-      // Параметры анимации
-      const duration = 5000 + Math.random() * 2000 // 5-7 секунд
-      const startTime = Date.now()
-      const totalDistance = spinningSymbols.value.length * SYMBOL_HEIGHT
-
-      const animate = () => {
-        const elapsed = Date.now() - startTime
-        const progress = Math.min(elapsed / duration, 1)
-
-        // Easing функция для плавной остановки (cubic ease-out)
-        const easeOut = 1 - Math.pow(1 - progress, 3)
-
-        spinOffset.value = -totalDistance * easeOut
-
-        if (progress < 1) {
-          requestAnimationFrame(animate)
-        } else {
-          // После завершения анимации сбрасываем offset
-          setTimeout(() => {
-            spinOffset.value = 0
-          }, 100)
-        }
-      }
-
-      animate()
+      animateTo(-totalDistance, duration)
     }
   },
 )
+
+onMounted(() => {
+  generateSpinningSymbols() // формируем ленту с финальным символом
+})
 </script>
 
 <style scoped>
@@ -116,15 +113,6 @@ watch(
   position: relative;
 }
 
-.symbol-display {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.3s ease;
-}
-
 .spin-overlay {
   position: absolute;
   top: 0;
@@ -132,7 +120,6 @@ watch(
   width: 100%;
   height: 100%;
   background: #19184f;
-  z-index: 1;
   overflow: hidden;
 }
 
@@ -148,19 +135,5 @@ watch(
 .symbol-icon {
   font-size: 96px;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-}
-
-.spinning .symbol-icon {
-  animation: symbolBlur 0.3s ease-in-out infinite;
-}
-
-@keyframes symbolBlur {
-  0%,
-  100% {
-    filter: blur(0px) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-  }
-  50% {
-    filter: blur(3px) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-  }
 }
 </style>
