@@ -5,10 +5,24 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages: {
     ru: {
-      miniSlot: '🎰 Mini-Slot 🎰',
+      miniSlot: 'MINI-SLOT',
+      startGame: 'начать игру',
+      tryAgain: 'попробуй ещё',
+      congrats: 'поздравляем!',
+      newGame: 'новая игра',
+      ok: 'ок',
+      start: 'старт',
+      spin: 'вращение',
     },
     en: {
-      miniSlot: '🎰 Mini-Slot 🎰',
+      miniSlot: 'MINI-SLOT',
+      startGame: 'начать игру',
+      tryAgain: 'попробуй ещё',
+      congrats: 'поздравляем!',
+      newGame: 'новая игра',
+      ok: 'ок',
+      start: 'start',
+      spin: 'spinnig',
     },
   },
 })

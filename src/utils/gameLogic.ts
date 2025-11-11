@@ -1,4 +1,10 @@
-import logo from '@/assets/img/logo.svg'
+import seven from '../assets/images/busters/1-min.png'
+import lemon from '../assets/images/busters/13-min.png'
+import diamond from '../assets/images/busters/3-min.png'
+import grape from '../assets/images/busters/6-min.png'
+import watermelon from '../assets/images/busters/7-min.png'
+import cherry from '../assets/images/busters/8-min.png'
+import logo from '../assets/images/logo.svg'
 import type { GameResult, Symbol, WinLine } from '../types/game'
 
 // Определяем символы с коэффициентами
@@ -19,6 +25,7 @@ export const SYMBOLS: Symbol[] = [
     multiplier: 10,
     probability: 0.05,
     color: '#FF0000',
+    img: seven,
   },
   {
     id: 'diamond',
@@ -27,6 +34,7 @@ export const SYMBOLS: Symbol[] = [
     multiplier: 10,
     probability: 0.08,
     color: '#00BFFF',
+    img: diamond,
   },
   {
     id: 'cherry',
@@ -35,6 +43,7 @@ export const SYMBOLS: Symbol[] = [
     multiplier: 10,
     probability: 0.12,
     color: '#DC143C',
+    img: cherry,
   },
   {
     id: 'lemon',
@@ -43,6 +52,7 @@ export const SYMBOLS: Symbol[] = [
     multiplier: 10,
     probability: 0.15,
     color: '#FFFF00',
+    img: lemon,
   },
   {
     id: 'grape',
@@ -51,6 +61,7 @@ export const SYMBOLS: Symbol[] = [
     multiplier: 10,
     probability: 0.18,
     color: '#9370DB',
+    img: grape,
   },
   {
     id: 'watermelon',
@@ -59,6 +70,7 @@ export const SYMBOLS: Symbol[] = [
     multiplier: 10,
     probability: 0.4,
     color: '#32CD32',
+    img: watermelon,
   },
 ]
 

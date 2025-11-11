@@ -1,40 +1,36 @@
 <template>
-  <div v-if="!showMachine" class="flex justify-center items-center">
-    <div class="flex flex-col justify-center items-center">
-      <div class="mb-10!">
-        <img class="animate-pulse-zoom" src="../assets/img/logo.svg" alt="Logo" />
+  <div
+    class="w-[1080px] h-[1920px] max-w-[1080px] max-h-[1920px]"
+    :class="{
+      'start-back': !showMachine,
+      'main-back': showMachine,
+    }"
+  >
+    <!-- Start Screen -->
+    <div
+      v-if="!showMachine && !store.showWinDisplay"
+      class="flex flex-col justify-center items-center text-center"
+    >
+      <div class="flex flex-col justify-center items-center mt-[741px]!">
+        <img src="../assets/images/logo.svg" alt="logo" class="mb-14!" />
+        <h1 class="font-bold text-[150px] text-white leading-40">{{ $t('miniSlot') }}</h1>
       </div>
-      <h1 class="text-[100px]! game-title mb-20!">{{ $t('miniSlot') }}</h1>
-      <button class="spin-button1 spinning" @click="start">
-        <span>Начать игру</span>
+      <button
+        @click="start"
+        class="uppercase text-[96px] text-white font-bold pb-5! px-33.5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF] mt-[346px]!"
+      >
+        {{ $t('startGame') }}
       </button>
     </div>
-  </div>
-  <div v-if="showMachine" class="slot-machine">
-    <div>
-      <div class="machine-header">
-        <h1 class="game-title">{{ $t('miniSlot') }}</h1>
-        <div class="stats">
-          <!-- <div class="stat-item">
-            <span class="stat-label">Баланс:</span>
-            <span class="stat-value">{{ store.balance }} 💰</span>
-          </div> -->
-          <div class="stat-item">
-            <span class="stat-label">Спинов:</span>
-            <span class="stat-value">{{ store.totalSpins }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Побед:</span>
-            <span class="stat-value">{{ store.totalWins }}</span>
-            <!-- ({{ store.winRate }}%) -->
-          </div>
-        </div>
-      </div>
-
+    <div
+      v-if="showMachine && !store.showWinDisplay"
+      class="flex flex-col items-center justify-center text-center"
+    >
+      <img src="../assets/images/logo.svg" alt="logo" class="mb-42! pt-42!" />
       <div class="machine-body">
         <div class="reels-container">
           <div v-for="row in 3" :key="row" class="reel-row">
-            <SlotReel
+            <MiniReel
               v-for="col in 3"
               :key="`${row}-${col}`"
               :symbol-id="getCurrentSymbol(row - 1, col - 1)"
@@ -66,56 +62,35 @@
         </div>
       </div>
 
-      <div class="machine-controls">
+      <div class="mt-42!">
         <button
           v-if="gameStarted"
-          class="spin-button"
-          :class="{ spinning: store.isSpinning, disabled: !store.canSpin }"
           :disabled="!store.canSpin"
           @click="handleSpin"
+          class="uppercase text-[96px] text-white font-bold pb-5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF]"
+          :class="{ 'px-74!': !store.isSpinning, 'px-45!': store.isSpinning }"
         >
-          <span v-if="store.isSpinning">⏳ ВРАЩЕНИЕ...</span>
-          <span v-else-if="store.balance < 10">💸 НЕ ХВАТАЕТ МОНЕТ</span>
-          <span v-else>🎲 СТАРТ</span>
+          {{ store.isSpinning ? $t('spin') : $t('start') }}
         </button>
-
-        <button v-if="!gameStarted" class="reset-button" @click="resetGame">🔄 НОВАЯ ИГРА</button>
       </div>
-
-      <!-- <div class="paytable">
-      <h3>💎 Таблица выплат</h3>
-      <div class="paytable-items">
-        <div
-          v-for="symbol in symbols"
-          :key="symbol.id"
-          class="paytable-item"
-          :style="{ borderLeftColor: symbol.color }"
-        >
-          <span class="symbol-display">{{ symbol.icon }} × 3</span>
-          <span class="multiplier">{{ symbol.multiplier }}x</span>
-          <span class="payout">{{ symbol.multiplier * 10 }} коинов</span>
-        </div>
-      </div>
-    </div> -->
-
-      <WinDisplay
-        :result="store.currentResult"
-        :show="store.showWinDisplay"
-        @close="handleCloseWin"
-      />
     </div>
+    <WinDisplay
+      v-if="store.showWinDisplay"
+      :result="store.currentResult"
+      :show="store.showWinDisplay"
+      @play-again="start"
+      @go-to-start="resetGame"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useGameStore } from '../stores/game'
-// import { SYMBOLS } from '../utils/gameLogic'
-import SlotReel from './MiniReel.vue'
+import MiniReel from './MiniReel.vue'
 import WinDisplay from './WinDisplay.vue'
 
 const store = useGameStore()
-// const symbols = SYMBOLS
 const showMachine = ref(false)
 const gameStarted = ref(false)
 
@@ -136,10 +111,6 @@ const handleSpin = async () => {
   await store.spin()
 }
 
-const handleCloseWin = () => {
-  store.closeWinDisplay()
-}
-
 const getLineCoords = (position: number[]) => {
   const [row, col] = position
   const cellSize = 252 // 120px + 6px gap
@@ -157,11 +128,9 @@ function resetGame() {
 }
 
 function start() {
+  store.resetGame()
   showMachine.value = true
   gameStarted.value = true
-  if (store.totalSpins === 0) {
-    location.reload()
-  }
 }
 watch(
   () => store.isSpinning,
@@ -174,71 +143,8 @@ watch(
 </script>
 
 <style scoped>
-.slot-machine {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 30px;
-  background-image: url('../assets/img/back-purple.jpg');
-  border-radius: 20px;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
-  font-family: 'Arial', sans-serif;
-}
-
-.machine-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.game-title {
-  font-size: 79px;
-  color: #ffd700;
-  margin: 0 0 20px;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-  animation: titleGlow 2s ease-in-out infinite;
-}
-
-@keyframes titleGlow {
-  0%,
-  100% {
-    text-shadow: 3px 3px 6px rgba(255, 215, 0, 0.5);
-  }
-  50% {
-    text-shadow: 3px 3px 20px rgba(255, 215, 0, 0.8);
-  }
-}
-
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.stat-label {
-  font-size: 40px;
-  color: #aaa;
-  text-transform: uppercase;
-}
-
-.stat-value {
-  font-size: 60px;
-  font-weight: bold;
-  color: #ffd700;
-}
-
 .machine-body {
   position: relative;
-  background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
-  padding: 30px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
 .reels-container {
@@ -276,93 +182,6 @@ watch(
   to {
     opacity: 1;
   }
-}
-
-.machine-controls {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.spin-button {
-  flex: 1;
-  max-width: 720px;
-  padding: 20px 40px;
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-  text-transform: uppercase;
-}
-
-.spin-button1 {
-  flex: 1;
-  max-width: 400px;
-  padding: 20px 40px;
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-  text-transform: uppercase;
-}
-
-.spin-button:hover:not(.disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
-}
-
-.spin-button:active:not(.disabled) {
-  transform: translateY(0);
-}
-
-.spin-button.spinning,
-.spin-button1.spinning {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  animation: spinButtonPulse 1s ease-in-out infinite;
-}
-
-.spin-button.disabled {
-  background: #555;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-@keyframes spinButtonPulse {
-  0%,
-  100% {
-    box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
-  }
-  50% {
-    box-shadow: 0 8px 30px rgba(245, 87, 108, 0.6);
-  }
-}
-
-.reset-button {
-  padding: 20px 30px;
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-  background: #555;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.reset-button:hover {
-  background: #666;
-  transform: translateY(-2px);
 }
 
 .paytable {
@@ -419,123 +238,10 @@ watch(
   flex: 1;
   text-align: right;
 }
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .slot-machine {
-    padding: 20px;
-  }
-
-  .game-title {
-    font-size: 32px;
-  }
-
-  .stats {
-    gap: 15px;
-  }
-
-  .stat-value {
-    font-size: 20px;
-  }
-
-  .machine-body {
-    padding: 20px;
-  }
-
-  .win-lines-overlay {
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-  }
-
-  .machine-controls {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .spin-button {
-    max-width: 100%;
-    font-size: 20px;
-    padding: 15px 30px;
-  }
-
-  .reset-button {
-    width: 100%;
-  }
-
-  .paytable-item {
-    padding: 10px 15px;
-  }
-
-  .symbol-display {
-    font-size: 24px;
-  }
-
-  .multiplier {
-    font-size: 18px;
-  }
-
-  .payout {
-    font-size: 16px;
-  }
+.start-back {
+  background-image: url('../assets/images/start-back.png');
 }
-
-@media (max-width: 480px) {
-  .slot-machine {
-    padding: 15px;
-  }
-
-  .game-title {
-    font-size: 28px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-  }
-
-  .stat-value {
-    font-size: 18px;
-  }
-
-  .machine-body {
-    padding: 15px;
-  }
-
-  .win-lines-overlay {
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
-  }
-
-  .spin-button {
-    font-size: 18px;
-    padding: 12px 24px;
-  }
-
-  .paytable {
-    padding: 15px;
-  }
-
-  .paytable h3 {
-    font-size: 20px;
-  }
-
-  .paytable-item {
-    padding: 8px 12px;
-  }
-
-  .symbol-display {
-    font-size: 20px;
-  }
-
-  .multiplier {
-    font-size: 16px;
-  }
-
-  .payout {
-    font-size: 14px;
-  }
+.main-back {
+  background-image: url('../assets/images/main-back.png');
 }
 </style>

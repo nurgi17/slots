@@ -1,8 +1,11 @@
 <template>
-  <div class="reel" :class="{ spinning: isSpinning }">
+  <div
+    class="reel border-8! border-solid! border-[#7617b4]! rounded-[30px]"
+    :class="{ spinning: isSpinning }"
+  >
     <div class="reel-content">
       <div class="symbol-display" :style="{ transform: `translateY(${displayOffset}px)` }">
-        <div class="symbol px-4!" :style="{ backgroundColor: finalSymbolData?.color }">
+        <div class="symbol pr-4!">
           <span v-if="!Boolean(finalSymbolData?.img)" class="symbol-icon">{{
             finalSymbolData?.icon
           }}</span>
@@ -13,12 +16,7 @@
       <!-- Spinning overlay с множеством символов -->
       <div v-if="isSpinning" class="spin-overlay">
         <div class="reel-strip" :style="{ transform: `translateY(${spinOffset}px)` }">
-          <div
-            v-for="(symbol, index) in spinningSymbols"
-            :key="index"
-            class="symbol px-4!"
-            :style="{ backgroundColor: symbol.color }"
-          >
+          <div v-for="(symbol, index) in spinningSymbols" :key="index" class="symbol pr-4!">
             <span v-if="!Boolean(symbol.img)" class="symbol-icon">{{ symbol.icon }}</span>
             <img v-else class="w-full h-auto" :src="symbol.img" alt="" />
           </div>
@@ -105,11 +103,7 @@ watch(
   width: 240px;
   height: 240px;
   overflow: hidden;
-  border: 3px solid #333;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
   position: relative;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .reel-content {
@@ -133,7 +127,7 @@ watch(
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: #19184f;
   z-index: 1;
   overflow: hidden;
 }
@@ -145,11 +139,6 @@ watch(
 .symbol {
   width: 240px;
   height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
 }
 
 .symbol-icon {

@@ -25,9 +25,6 @@ export interface GameResult {
 }
 
 export interface GameState {
-  balance: number
   isSpinning: boolean
   currentResult: GameResult | null
-  totalSpins: number
-  totalWins: number
 }
