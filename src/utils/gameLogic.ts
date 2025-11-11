@@ -136,23 +136,47 @@ function getRandomSymbol(): Symbol {
 }
 
 // Генерация выигрышного поля с конкретным символом
-function generateWinningField(targetSymbol: Symbol, lineIndex: number) {
-  const field: string[][] = []
-  const winLine = WIN_LINES[lineIndex]
+function generateWinningField(targetSymbol: Symbol, maxLines = 2): string[][] {
+  const field: string[][] = Array.from({ length: 3 }, () => Array(3).fill(''))
+  const linesToFill: number[] = []
 
-  // Заполняем поле случайными символами
+  // Случайно выбираем количество выигрышных линий: 1 или 2
+  const numberOfWinningLines = Math.random() < 0.2 ? 2 : 1 // 20% шанс 2 линии
+  while (linesToFill.length < numberOfWinningLines) {
+    const idx = Math.floor(Math.random() * WIN_LINES.length)
+    if (!linesToFill.includes(idx)) linesToFill.push(idx)
+  }
+
+  // Сначала заполняем все поле случайными символами
   for (let row = 0; row < 3; row++) {
-    field[row] = []
     for (let col = 0; col < 3; col++) {
       field[row]![col] = getRandomSymbol().id
     }
   }
 
-  if (!winLine) return
+  // Потом заменяем выбранные линии на targetSymbol
+  for (const lineIdx of linesToFill) {
+    const winLine = WIN_LINES[lineIdx]
+    for (const [row, col] of winLine!.line) {
+      field[row!]![col!] = targetSymbol.id
+    }
+  }
 
-  // Заполняем выигрышную линию нужным символом
-  for (const [row, col] of winLine.line) {
-    field[row!]![col!] = targetSymbol.id
+  // Проверяем, чтобы не было больше maxLines выигрышных линий
+  let attempts = 0
+  while (
+    hasAnyWinningLine(field) &&
+    checkWinningLines(field).winningLines.length > maxLines &&
+    attempts < 20
+  ) {
+    // подменяем лишние линии случайными символами
+    const result = checkWinningLines(field)
+    for (const winLine of result.winningLines.slice(maxLines)) {
+      for (const [row, col] of winLine.line.line) {
+        field[row!]![col!] = getRandomSymbol().id
+      }
+    }
+    attempts++
   }
 
   return field

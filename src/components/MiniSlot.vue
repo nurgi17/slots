@@ -111,14 +111,16 @@ const handleSpin = async () => {
   await store.spin()
 }
 
-const getLineCoords = (position: number[]) => {
+const cellWidth = 240 // ширина MiniReel
+const cellHeight = 240 // высота MiniReel
+const gap = 6 // gap между слотами
+
+function getLineCoords(position: number[]) {
   const [row, col] = position
-  const cellSize = 252 // 120px + 6px gap
-  const offset = 126 // половина ячейки
 
   return {
-    x: (col || 0) * cellSize + offset,
-    y: (row || 0) * cellSize + offset,
+    x: col! * (cellWidth + gap) + cellWidth / 2,
+    y: row! * (cellHeight + gap) + cellHeight / 2,
   }
 }
 
@@ -174,8 +176,29 @@ watch(
 }
 
 .win-line-animation {
+  stroke: #0ff; /* яркий голубой неон */
+  stroke-width: 6;
+  stroke-linecap: round;
   opacity: 0;
-  animation: lineAppear 0.5s ease-out forwards;
+  filter: drop-shadow(0 0 8px #0ff) drop-shadow(0 0 16px #0ff) drop-shadow(0 0 24px #0ff);
+  animation:
+    neonLineAppear 0.5s ease-out forwards,
+    neonGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neonLineAppear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes neonGlow {
+  from {
+    filter: drop-shadow(0 0 4px #0ff) drop-shadow(0 0 8px #0ff) drop-shadow(0 0 12px #0ff);
+  }
+  to {
+    filter: drop-shadow(0 0 12px #0ff) drop-shadow(0 0 24px #0ff) drop-shadow(0 0 36px #0ff);
+  }
 }
 
 @keyframes lineAppear {
