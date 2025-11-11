@@ -5,7 +5,7 @@
   >
     <div class="reel-content">
       <div class="symbol-display" :style="{ transform: `translateY(${displayOffset}px)` }">
-        <div class="symbol pr-4!">
+        <div class="symbol pr-4! flex items-center justify-center text-center">
           <span v-if="!Boolean(finalSymbolData?.img)" class="symbol-icon">{{
             finalSymbolData?.icon
           }}</span>
@@ -16,7 +16,11 @@
       <!-- Spinning overlay с множеством символов -->
       <div v-if="isSpinning" class="spin-overlay">
         <div class="reel-strip" :style="{ transform: `translateY(${spinOffset}px)` }">
-          <div v-for="(symbol, index) in spinningSymbols" :key="index" class="symbol pr-4!">
+          <div
+            v-for="(symbol, index) in spinningSymbols"
+            :key="index"
+            class="symbol pr-4! flex items-center justify-center text-center"
+          >
             <span v-if="!Boolean(symbol.img)" class="symbol-icon">{{ symbol.icon }}</span>
             <img v-else class="w-full h-auto" :src="symbol.img" alt="" />
           </div>
