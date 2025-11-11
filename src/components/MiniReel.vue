@@ -9,7 +9,16 @@
             class="symbol flex items-center justify-center text-center"
           >
             <span v-if="!symbol.img" class="symbol-icon">{{ symbol.icon }}</span>
-            <img v-else class="w-full h-auto" :src="symbol.img" alt="" />
+            <img
+              v-else
+              class="h-auto"
+              :src="symbol.img"
+              alt=""
+              :class="{
+                'w-full': symbol.icon !== '🎰',
+                'w-[90%] -ml-3!': symbol.icon === '🎰',
+              }"
+            />
           </div>
         </div>
       </div>

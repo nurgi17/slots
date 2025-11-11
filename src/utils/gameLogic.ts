@@ -138,42 +138,43 @@ function getRandomSymbol(): Symbol {
 // Генерация выигрышного поля с конкретным символом
 function generateWinningField(targetSymbol: Symbol, maxLines = 2): string[][] {
   const field: string[][] = Array.from({ length: 3 }, () => Array(3).fill(''))
+
+  // Количество выигрышных линий
+  const numberOfWinningLines = Math.random() < 0.07 ? 2 : 1
   const linesToFill: number[] = []
 
-  // Случайно выбираем количество выигрышных линий: 1 или 2
-  const numberOfWinningLines = Math.random() < 0.2 ? 2 : 1 // 20% шанс 2 линии
   while (linesToFill.length < numberOfWinningLines) {
     const idx = Math.floor(Math.random() * WIN_LINES.length)
     if (!linesToFill.includes(idx)) linesToFill.push(idx)
   }
 
-  // Сначала заполняем все поле случайными символами
+  // Сначала заполняем поле случайными символами
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
       field[row]![col] = getRandomSymbol().id
     }
   }
 
-  // Потом заменяем выбранные линии на targetSymbol
+  // Заносим целевые символы в выбранные линии
+  const occupied: Set<string> = new Set()
   for (const lineIdx of linesToFill) {
     const winLine = WIN_LINES[lineIdx]
     for (const [row, col] of winLine!.line) {
       field[row!]![col!] = targetSymbol.id
+      occupied.add(`${row}-${col}`)
     }
   }
 
-  // Проверяем, чтобы не было больше maxLines выигрышных линий
+  // Проверка на лишние линии
   let attempts = 0
-  while (
-    hasAnyWinningLine(field) &&
-    checkWinningLines(field).winningLines.length > maxLines &&
-    attempts < 20
-  ) {
-    // подменяем лишние линии случайными символами
+  while (checkWinningLines(field).winningLines.length > maxLines && attempts < 20) {
     const result = checkWinningLines(field)
     for (const winLine of result.winningLines.slice(maxLines)) {
       for (const [row, col] of winLine.line.line) {
-        field[row!]![col!] = getRandomSymbol().id
+        const key = `${row}-${col}`
+        if (!occupied.has(key)) {
+          field[row!]![col!] = getRandomSymbol().id
+        }
       }
     }
     attempts++
