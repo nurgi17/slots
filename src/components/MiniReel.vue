@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const spinOffset = ref(0)
 const displayOffset = ref(0)
-const SYMBOL_HEIGHT = 120
+const SYMBOL_HEIGHT = 224
 
 // Получаем данные финального символа
 const finalSymbolData = computed(() => {
