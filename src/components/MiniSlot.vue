@@ -17,7 +17,8 @@
       </div>
       <button
         @click="start"
-        class="uppercase text-[96px] text-white font-bold pb-5! px-33.5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF] mt-[346px]!"
+        @touchstart.prevent="start"
+        class="cursor-pointer touch-manipulation relative z-10 uppercase text-[96px] text-white font-bold pb-5! px-33.5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF] mt-[346px]!"
       >
         {{ $t('startGame') }}
       </button>
@@ -67,7 +68,8 @@
           v-if="gameStarted"
           :disabled="!store.canSpin"
           @click="handleSpin"
-          class="uppercase text-[96px] text-white font-bold pb-5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF]"
+          @touchstart.prevent="handleSpin"
+          class="cursor-pointer touch-manipulation relative z-10 uppercase text-[96px] text-white font-bold pb-5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF]"
           :class="{ 'px-74!': !store.isSpinning, 'px-45!': store.isSpinning }"
         >
           {{ store.isSpinning ? $t('spin') : $t('start') }}
