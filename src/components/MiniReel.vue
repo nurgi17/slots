@@ -96,7 +96,7 @@ watch(
       generateSpinningSymbols() // формируем ленту с финальным символом
       await new Promise((resolve) => setTimeout(resolve, props.delay))
       const totalDistance = (spinningSymbols.value.length - 1) * SYMBOL_HEIGHT
-      const duration = 4000 + Math.random() * 2000
+      const duration = 10000 + Math.random() * 2000
 
       animateTo(-totalDistance, duration)
     }

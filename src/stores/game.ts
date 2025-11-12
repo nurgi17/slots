@@ -26,7 +26,7 @@ export const useGameStore = defineStore('game', {
       this.currentResult = result
 
       // Имитация задержки спина (5-7 секунд)
-      await new Promise((resolve) => setTimeout(resolve, 6000))
+      await new Promise((resolve) => setTimeout(resolve, 10000))
 
       // Показываем окно выигрыша после небольшой задержки
       setTimeout(() => {
