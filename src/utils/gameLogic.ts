@@ -13,7 +13,7 @@ export const SYMBOLS: Symbol[] = [
     id: 'jackpot',
     name: '21',
     icon: '🎰',
-    multiplier: 15,
+    multiplier: 40,
     probability: 0.02,
     color: '#3C1082',
     img: logo,
