@@ -13,7 +13,7 @@
             <img src="../assets/images/coin.svg" alt="" class="w-[199px] h-[216px]" />
           </div>
         </div>
-        <div class="font-bold text-white text-[96px] mt-8! uppercase">
+        <div class="font-bold text-white text-[85px] mt-8! uppercase">
           {{ totalWin > 0 ? $t('congrats') : $t('tryAgain') }}
         </div>
       </div>

@@ -1,8 +1,8 @@
 import { createI18n } from 'vue-i18n'
 
 const i18n = createI18n({
-  locale: 'ru',
-  fallbackLocale: 'en',
+  locale: 'en',
+  fallbackLocale: 'ru',
   messages: {
     ru: {
       miniSlot: 'MINI-SLOT',
@@ -16,10 +16,10 @@ const i18n = createI18n({
     },
     en: {
       miniSlot: 'MINI-SLOT',
-      startGame: 'начать игру',
-      tryAgain: 'попробуй ещё',
-      congrats: 'поздравляем!',
-      newGame: 'новая игра',
+      startGame: 'start game',
+      tryAgain: 'try again',
+      congrats: 'congratulations!',
+      newGame: 'new game',
       ok: 'ок',
       start: 'start',
       spin: 'spinnig',
