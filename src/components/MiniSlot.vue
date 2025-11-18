@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-[1080px] h-[1920px] max-w-[1080px] max-h-[1920px]"
+    class="w-[2560px] h-[1440px] max-w-[2560px] max-h-[1440px]"
     :class="{
       'start-back': !showMachine,
       'main-back': showMachine,
@@ -11,7 +11,7 @@
       v-if="!showMachine && !store.showWinDisplay"
       class="flex flex-col justify-center items-center text-center"
     >
-      <div class="flex flex-col justify-center items-center mt-[741px]!">
+      <div class="flex flex-col justify-center items-center mt-[441px]!">
         <img src="../assets/images/logo.svg" alt="logo" class="mb-14!" />
         <h1 class="font-bold text-[150px] text-white leading-40">{{ $t('miniSlot') }}</h1>
       </div>
@@ -27,7 +27,7 @@
       v-if="showMachine && !store.showWinDisplay"
       class="flex flex-col items-center justify-center text-center"
     >
-      <img src="../assets/images/logo.svg" alt="logo" class="mb-42! pt-42!" />
+      <img src="../assets/images/logo.svg" alt="logo" class="mb-21! pt-21!" />
       <div class="machine-body">
         <div class="reels-container">
           <div v-for="row in 3" :key="row" class="reel-row">
@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <div class="mt-42!">
+      <div class="mt-30!">
         <button
           v-if="gameStarted"
           :disabled="!store.canSpin"
