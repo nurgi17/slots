@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col justify-center items-center text-center">
-    <img src="../assets/images/logo.svg" alt="logo" class="mb-[180px]! mt-[140px]!" />
+    <img src="../assets/images/logo.svg" alt="logo" class="mb-20! mt-20!" />
     <div
-      class="flex flex-col justify-center items-center text-center w-[900px] h-[1424px] rounded-[60px] border-10 border-solid border-[#AE00FF] result-back"
+      class="flex flex-col justify-center items-center text-center w-[900px] h-[1200px] rounded-[60px] border-10 border-solid border-[#AE00FF] result-back"
     >
-      <div class="mt-[200px]! flex flex-col justify-center items-center">
+      <div class="mt-[50px]! flex flex-col justify-center items-center">
         <div class="flex items-center gap-[50px]">
           <div class="font-medium text-white text-[500px] leading-120">
             {{ totalWin }}

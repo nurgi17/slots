@@ -22,7 +22,7 @@ const i18n = createI18n({
       newGame: 'new game',
       ok: 'ок',
       start: 'start',
-      spin: 'spinnig',
+      spin: 'spinning',
     },
   },
 })
