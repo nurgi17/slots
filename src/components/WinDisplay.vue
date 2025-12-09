@@ -2,11 +2,11 @@
   <div class="flex flex-col justify-center items-center text-center">
     <img src="../assets/images/logo.svg" alt="logo" class="mb-20! mt-20!" />
     <div
-      class="flex flex-col justify-center items-center text-center w-[900px] h-[1200px] rounded-[60px] border-10 border-solid border-[#AE00FF] result-back"
+      class="flex flex-col justify-center items-center text-center w-[900px] h-[1000px] rounded-[60px] border-10 border-solid border-[#AE00FF] result-back"
     >
       <div class="mt-[50px]! flex flex-col justify-center items-center">
         <div class="flex items-center gap-[50px]">
-          <div class="font-medium text-white text-[500px] leading-120">
+          <div class="font-medium text-white text-[400px] leading-120">
             {{ totalWin }}
           </div>
           <div class="mt-30!">
@@ -17,11 +17,11 @@
           {{ totalWin > 0 ? $t('congrats') : $t('tryAgain') }}
         </div>
       </div>
-      <div class="mt-[100px]!">
+      <div class="mt-[50px]!">
         <button
           @click="totalWin > 0 ? goToStart() : playAgain()"
           @touchstart.prevent="totalWin > 0 ? goToStart() : playAgain()"
-          class="cursor-pointer touch-manipulation relative z-10 uppercase text-[96px] text-white font-bold pb-5! px-24! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF]"
+          class="cursor-pointer touch-manipulation relative z-10 uppercase text-[85px] text-white font-bold pb-5! px-24! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF]"
         >
           {{ totalWin > 0 ? $t('ok') : $t('newGame') }}
         </button>

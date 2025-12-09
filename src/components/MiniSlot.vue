@@ -11,14 +11,14 @@
       v-if="!showMachine && !store.showWinDisplay"
       class="flex flex-col justify-center items-center text-center"
     >
-      <div class="flex flex-col justify-center items-center mt-[741px]!">
+      <div class="flex flex-col justify-center items-center mt-[341px]!">
         <img src="../assets/images/logo.svg" alt="logo" class="mb-14!" />
         <h1 class="font-bold text-[150px] text-white leading-40">{{ $t('miniSlot') }}</h1>
       </div>
       <button
         @click="start"
         @touchstart.prevent="start"
-        class="cursor-pointer touch-manipulation relative z-10 uppercase text-[96px] text-white font-bold pb-5! px-33.5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF] mt-[346px]!"
+        class="cursor-pointer touch-manipulation relative z-10 uppercase text-[96px] text-white font-bold pb-5! px-33.5! rounded-[10000px] bg-linear-to-tr from-[#3C1082] to-[#AE00FF] border-10 border-solid border-[#AE00FF] mt-[146px]!"
       >
         {{ $t('startGame') }}
       </button>
